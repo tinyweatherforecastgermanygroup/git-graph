@@ -1,5 +1,6 @@
 fork-*.json
 forks-*.json
+*.mermaid
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

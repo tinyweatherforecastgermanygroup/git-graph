@@ -19,6 +19,10 @@ with open('forks-api.json','w+',encoding='utf-8') as fh:
 def get_commits_json(clone_url, fork_id):
     print(f"analyzing '{clone_url}' ... ")
 
+    mermaid_str = """
+gitGraph
+    checkout main
+"""
     commits_list = []
 
     for commit in Repository(clone_url).traverse_commits():
@@ -31,12 +35,17 @@ def get_commits_json(clone_url, fork_id):
         #for file in commit.modified_files:
         #    commit_dict['mod_files'].append(str(file.filename))
         
+        mermaid_str += '    commit id:"'+str(commit.hash)[0:6]+'"\n'
+
         commits_list.append(commit_dict)
         del commit_dict
 
     with open(f"fork-{fork_id}.json",'w+',encoding='utf-8') as fh:
         fh.write(str(json.dumps(commits_list, indent=4)))
     del commits_list
+
+    with open(f"fork-{fork_id}.mermaid",'w+',encoding='utf-8') as fh:
+        fh.write(str(mermaid_str))
 
 with concurrent.futures.ThreadPoolExecutor(max_workers=cpu_count()) as executor:
     for fork_entry in forks_req_json:
