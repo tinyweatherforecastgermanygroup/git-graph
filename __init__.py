@@ -2,6 +2,7 @@
 import concurrent.futures
 from multiprocessing import cpu_count
 import json
+from pprint import pprint
 
 from pydriller import Repository
 
@@ -30,6 +31,7 @@ gitGraph
         commit_dict['hash'] = str(commit.hash)
         commit_dict['msg'] = str(commit.msg)
         commit_dict['author_name'] = str(commit.author.name)
+        #commit_dict['branches'] = commit.branches
 
         #commit_dict['mod_files'] = []
         #for file in commit.modified_files:
