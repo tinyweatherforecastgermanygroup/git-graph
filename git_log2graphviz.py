@@ -12,20 +12,24 @@ digraph G {
 """
 dot_graph_2 = ''
 
-# if repo not cloned yet -> Repository("codeberg.org/Starfish/TinyWeatherForecastGermany.git")
+# if repo not cloned yet -> Repository("https://codeberg.org/Starfish/TinyWeatherForecastGermany.git")
 for commit in Repository(f"TinyWeatherForecastGermany/").traverse_commits():
     commit_dict = {}
     commit_dict['hash'] = str(commit.hash)
     commit_dict['msg'] = str(commit.msg).replace('"',"'")
+
+    commit_dict['timestamp'] = str(commit.committer_date)
+
     commit_dict['author_name'] = str(commit.author.name)
     commit_dict['branches'] = list(commit.branches)
     commit_dict['parents'] = list(commit.parents)
+    commit_dict['merge'] = commit.merge
     
     c_color = ''
-    if 'merge pull' in str(commit_dict['msg']).lower():
+    if commit_dict['merge']:  #'merge pull' in str(commit_dict['msg']).lower():
         c_color = ',color=blue'
-
-    dot_graph_1 += f"\t\"{commit_dict['hash']}\" [label=\"{commit_dict['hash'][0:6]} - {commit_dict['author_name']}\",tooltip=\"{commit_dict['msg']}\",shape=box{c_color}];\n"
+    
+    dot_graph_1 += f"\t\"{commit_dict['hash']}\" [label=<<B>{commit_dict['hash'][0:6]}</B>{commit_dict['author_name']}>, comment=\"{commit_dict['timestamp']}\", tooltip=\"{commit_dict['timestamp']}\n{commit_dict['msg']}\", shape=box{c_color}, URL=\"https://codeberg.org/Starfish/TinyWeatherForecastGermany/commit/{commit_dict['hash']}\"];\n"
 
     c_parents_len = len(commit_dict['parents'])
     if c_parents_len > 0:
