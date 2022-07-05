@@ -64,4 +64,5 @@ jobs:
         with:
           name: generated-svg
           path: |
-            */*.svg
+            *.svg
+            *.dot
