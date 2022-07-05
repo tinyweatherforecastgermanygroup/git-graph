@@ -24,7 +24,7 @@ jobs:
         run: git clone https://codeberg.org/Starfish/TinyWeatherForecastGermany.git TinyWeatherForecastGermany
           
       - name: clone this repo
-        run: git clone https://github.com/eUgEntOptIc44/git-graph https://github.com/eUgEntOptIc44/git-graph
+        run: git clone https://github.com/eUgEntOptIc44/git-graph git-graph
       
       - name: update packages
         run: sudo apt-get update && sudo apt-get upgrade
