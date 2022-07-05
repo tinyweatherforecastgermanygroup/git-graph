@@ -1,0 +1,67 @@
+name: exodus-privacy scan
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ ]
+  schedule:
+    - cron: "5 7 * * */2" # every two days at 7:05am UTC
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+  
+  repository_dispatch: # run workflow on api request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: clone remote repo
+        run: git clone https://codeberg.org/Starfish/TinyWeatherForecastGermany.git TinyWeatherForecastGermany
+          
+      - name: clone this repo
+        run: git clone https://github.com/eUgEntOptIc44/git-graph https://github.com/eUgEntOptIc44/git-graph
+      
+      - name: update packages
+        run: sudo apt-get update && sudo apt-get upgrade
+      
+      - name: Setup Python 3.x
+        uses: actions/setup-python@v2.2.2
+    
+      - name: install virtualenv
+        run: pip install virtualenv
+      
+      - name: init virtualenv
+        run: virtualenv venv
+      
+      - name: activate virtualenv
+        run: source venv/bin/activate
+
+      - name: upgrade pip
+        run: python -m pip install --upgrade pip
+      
+      - name: install graphviz
+        run: sudo apt-get install -y graphviz
+
+      - name: list directory contents
+        run: ls -lisha
+
+      - name: install pip dependencies
+        run: pip install -r requirements.txt
+
+      - name: generate git graph using Python and graphviz
+        run: python git_log2graphviz.py
+      
+      - name: list directory contents
+        run: ls -lisha
+      
+      - name: archive generated svg
+        uses: actions/upload-artifact@v2
+        with:
+          name: generated-svg
+          path: |
+            */*.svg

@@ -44,7 +44,7 @@ for commit in Repository(f"TinyWeatherForecastGermany/").traverse_commits():
 
 dot_graph_1 += "\n\n" + dot_graph_2 + "}"
 
-with open(f"test.dot",'w+',encoding='utf-8') as fh:
+with open(f"git_graph.dot",'w+',encoding='utf-8') as fh:
     fh.write(str(dot_graph_1))
 
-os.system("dot -Tsvg -Otest.svg test.dot")
+os.system("dot -Tsvg -o git_graph.svg git_graph.dot")
