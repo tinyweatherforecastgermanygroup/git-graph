@@ -78,11 +78,12 @@ jobs:
         run: |
          cd git-graph
          git status
+         git reset
          git add *.svg
          git add *.dot || true
          git status
 
-      - name: git commit
+      - name: git commit and push
         run: |
           cd git-graph
           git config --local user.name eUgEntOptIc44
