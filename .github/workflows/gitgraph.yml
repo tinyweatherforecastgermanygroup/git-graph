@@ -1,4 +1,4 @@
-name: exodus-privacy scan
+name: generate git graph
 
 # Controls when the workflow will run
 on:
@@ -24,13 +24,15 @@ jobs:
         run: git clone https://codeberg.org/Starfish/TinyWeatherForecastGermany.git TinyWeatherForecastGermany
           
       - name: clone this repo
-        run: git clone https://github.com/eUgEntOptIc44/git-graph git-graph
+        run: git clone https://github.com/${{ github.repository }}.git git-graph
       
       - name: update packages
         run: sudo apt-get update && sudo apt-get upgrade
       
       - name: Setup Python 3.x
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
     
       - name: install virtualenv
         run: pip install virtualenv
@@ -66,3 +68,23 @@ jobs:
           path: |
             *.svg
             *.dot
+      
+      - name: copy artifacts to git repo directory
+        run: |
+          cp *.svg git-graph/ || true
+          cp *.dot git-graph/ || true
+
+      - name: git commit and push
+        run: |
+          cd git-graph
+          git config --local user.name eUgEntOptIc44
+          git config --local user.email eUgEntOptIc@outlook.de
+          git checkout --orphan pages
+          git reset
+          git add *.svg
+          git add *.dot || true
+          git add README.md || true
+          git commit -m "update git graph"
+          git remote add github-pages "https://${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git push -u -f github-pages
+      

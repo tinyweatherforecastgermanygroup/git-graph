@@ -1,7 +1,9 @@
 # git-graph
 
-Fetch commits of all forks of TinyWeatherForecastGermany and draw a graph for them later on
+Fetch all commits of [**TinyWeatherForecastGermany**](https://codeberg.org/Starfish/TinyWeatherForecastGermany/) and draw a graph for them using graphviz.
 
-**status**: early WIP (!!)
+The results are located at the `pages` branch and also published using GitHub Pages.
+
+**status**: early development
 
 **author**: Jean-Luc Tibaux
