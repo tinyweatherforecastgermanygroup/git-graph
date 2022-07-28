@@ -1,4 +1,4 @@
-name: exodus-privacy scan
+name: generate git graph
 
 # Controls when the workflow will run
 on:
@@ -30,7 +30,9 @@ jobs:
         run: sudo apt-get update && sudo apt-get upgrade
       
       - name: Setup Python 3.x
-        uses: actions/setup-python@v2.2.2
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
     
       - name: install virtualenv
         run: pip install virtualenv
@@ -66,3 +68,32 @@ jobs:
           path: |
             *.svg
             *.dot
+      
+      - name: copy artifacts to git repo directory
+        run: |
+          cp *.svg git-graph/ || true
+          cp *.dot git-graph/ || true
+
+      - name: change directory
+        run: cd git-graph
+
+      - name: git status
+        run: git status
+
+      - name: git add
+        run: |
+          git add *.svg
+          git add *.dot
+
+      - name: git status
+        run: git status
+      
+      - name: git commit
+        run: |
+          git config --local user.name eUgEntOptIc44
+          git config --local user.email eUgEntOptIc@outlook.de
+          git switch -c pages
+          git commit -m "update git graph"
+          git remote add github-pages "https://${{ secrets.GITHUB_TOKEN }}@github.com/eUgEntOptIc44/git-graph.git"
+          git push -b github-pages
+      
