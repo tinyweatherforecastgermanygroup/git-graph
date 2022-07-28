@@ -82,8 +82,8 @@ jobs:
           git add *.dot || true
           git config --local user.name eUgEntOptIc44
           git config --local user.email eUgEntOptIc@outlook.de
-          git switch -c pages
+          git switch --orphan pages
           git commit -m "update git graph"
           git remote add github-pages "https://${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-          git push -u github-pages
+          git push -u -f github-pages
       
