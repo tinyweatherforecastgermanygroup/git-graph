@@ -77,12 +77,12 @@ jobs:
       - name: git commit and push
         run: |
           cd git-graph
+          git config --local user.name eUgEntOptIc44
+          git config --local user.email eUgEntOptIc@outlook.de
+          git checkout --orphan pages
           git reset
           git add *.svg
           git add *.dot || true
-          git config --local user.name eUgEntOptIc44
-          git config --local user.email eUgEntOptIc@outlook.de
-          git switch --orphan pages
           git commit -m "update git graph"
           git remote add github-pages "https://${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push -u -f github-pages
