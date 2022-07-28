@@ -79,11 +79,12 @@ jobs:
          cd git-graph
          git status
          git add *.svg
-         git add *.dot
+         git add *.dot || true
          git status
       
       - name: git commit
         run: |
+          cd git-graph
           git config --local user.name eUgEntOptIc44
           git config --local user.email eUgEntOptIc@outlook.de
           git switch -c pages
