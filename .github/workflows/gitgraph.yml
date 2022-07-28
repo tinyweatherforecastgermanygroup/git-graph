@@ -81,7 +81,7 @@ jobs:
          git add *.svg
          git add *.dot || true
          git status
-      
+
       - name: git commit
         run: |
           cd git-graph
@@ -89,6 +89,6 @@ jobs:
           git config --local user.email eUgEntOptIc@outlook.de
           git switch -c pages
           git commit -m "update git graph"
-          git remote add github-pages "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git remote add github-pages "https://${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push -u github-pages
       
