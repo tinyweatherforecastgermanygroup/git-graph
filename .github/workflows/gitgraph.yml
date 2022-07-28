@@ -74,18 +74,12 @@ jobs:
           cp *.svg git-graph/ || true
           cp *.dot git-graph/ || true
 
-      - name: prep git commit
-        run: |
-         cd git-graph
-         git status
-         git reset
-         git add *.svg
-         git add *.dot || true
-         git status
-
       - name: git commit and push
         run: |
           cd git-graph
+          git reset
+          git add *.svg
+          git add *.dot || true
           git config --local user.name eUgEntOptIc44
           git config --local user.email eUgEntOptIc@outlook.de
           git switch -c pages
