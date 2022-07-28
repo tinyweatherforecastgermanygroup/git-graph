@@ -89,5 +89,5 @@ jobs:
           git switch -c pages
           git commit -m "update git graph"
           git remote add github-pages "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
-          git push -b github-pages
+          git push -u github-pages
       
