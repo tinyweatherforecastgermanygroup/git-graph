@@ -24,7 +24,7 @@ jobs:
         run: git clone https://codeberg.org/Starfish/TinyWeatherForecastGermany.git TinyWeatherForecastGermany
           
       - name: clone this repo
-        run: git clone https://github.com/eUgEntOptIc44/git-graph git-graph
+        run: git clone https://github.com/${{ github.repository }}.git git-graph
       
       - name: update packages
         run: sudo apt-get update && sudo apt-get upgrade
@@ -74,19 +74,13 @@ jobs:
           cp *.svg git-graph/ || true
           cp *.dot git-graph/ || true
 
-      - name: change directory
-        run: cd git-graph
-
-      - name: git status
-        run: git status
-
-      - name: git add
+      - name: prep git commit
         run: |
-          git add *.svg
-          git add *.dot
-
-      - name: git status
-        run: git status
+         cd git-graph
+         git status
+         git add *.svg
+         git add *.dot
+         git status
       
       - name: git commit
         run: |
@@ -94,6 +88,6 @@ jobs:
           git config --local user.email eUgEntOptIc@outlook.de
           git switch -c pages
           git commit -m "update git graph"
-          git remote add github-pages "https://${{ secrets.GITHUB_TOKEN }}@github.com/eUgEntOptIc44/git-graph.git"
+          git remote add github-pages "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push -b github-pages
       
