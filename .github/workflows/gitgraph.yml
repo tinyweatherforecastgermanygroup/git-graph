@@ -83,6 +83,7 @@ jobs:
           git reset
           git add *.svg
           git add *.dot || true
+          git add README.md || true
           git commit -m "update git graph"
           git remote add github-pages "https://${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push -u -f github-pages
