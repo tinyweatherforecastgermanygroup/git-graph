@@ -2,6 +2,7 @@
 from pprint import pprint
 import json
 import os
+import re
 
 from pydriller import Repository
 
@@ -48,3 +49,12 @@ with open(f"git_graph.dot",'w+',encoding='utf-8') as fh:
     fh.write(str(dot_graph_1))
 
 os.system("dot -Tsvg -o git_graph.svg git_graph.dot")
+
+svg_contents = ''
+with open(f"git_graph.svg",'r',encoding='utf-8') as fh:
+    svg_contents = str(fh.read())
+
+svg_contents = re.sub(r'(?im)[\r\n]*\<!\-\-[\w \?\&\#\;\,\:\+]+\-\-\>[\r\n]*','',str(svg_contents))
+
+with open(f"git_graph.svg",'w+',encoding='utf-8') as fh:
+    fh.write(str(svg_contents))
