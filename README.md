@@ -4,6 +4,9 @@ Fetch all commits of [**TinyWeatherForecastGermany**](https://codeberg.org/Starf
 
 The results are located at the `pages` branch and also published using GitHub Pages.
 
-**status**: early development
+* [`git_graph.svg`](https://tinyweatherforecastgermanygroup.github.io/git-graph/git_graph.svg)
+* [`git_graph.dot`](https://tinyweatherforecastgermanygroup.github.io/git-graph/git_graph.dot)
+
+**status**: work in progress
 
 **author**: Jean-Luc Tibaux
