@@ -10,3 +10,8 @@ The results are located at the `pages` branch and also published using GitHub Pa
 **status**: work in progress
 
 **author**: Jean-Luc Tibaux
+
+## TODO
+
+1. fetch all forks from codeberg api
+2. compare branches of forks as github does it
