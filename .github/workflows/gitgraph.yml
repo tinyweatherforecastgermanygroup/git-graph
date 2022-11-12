@@ -62,7 +62,7 @@ jobs:
         run: ls -lisha
       
       - name: archive generated svg
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: generated-svg
           path: |
