@@ -27,8 +27,11 @@ jobs:
         run: git clone https://github.com/${{ github.repository }}.git git-graph
       
       - name: update packages
-        run: sudo apt-get update && sudo apt-get upgrade
+        run: timeout 120s sudo apt update
       
+      # - name: upgrade packages
+      #   run: timeout 120s sudo apt upgrade -y
+
       - name: Setup Python 3.x
         uses: actions/setup-python@v4
         with:
@@ -47,7 +50,7 @@ jobs:
         run: python -m pip install --upgrade pip
       
       - name: install graphviz
-        run: sudo apt-get install -y graphviz
+        run: sudo apt install -y graphviz
 
       - name: list directory contents
         run: ls -lisha
