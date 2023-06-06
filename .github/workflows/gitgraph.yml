@@ -2,17 +2,17 @@ name: generate git graph
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+  # Triggers the workflow on push events and only for the main branch
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches-ignore: [ main ]
+    branches-ignore: [main]
   schedule:
     - cron: "5 7 * * */2" # every two days at 7:05am UTC
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-  
+
   repository_dispatch: # run workflow on api request
 
 # prevent concurrent jobs
@@ -27,13 +27,13 @@ jobs:
     steps:
       - name: clone remote repo
         run: git clone https://codeberg.org/Starfish/TinyWeatherForecastGermany.git TinyWeatherForecastGermany
-          
+
       - name: clone this repo
         run: git clone https://github.com/${{ github.repository }}.git "git-graph"
-      
+
       - name: update apt packages
         run: timeout 120s sudo apt update || true
-      
+
       - name: upgrade apt packages
         run: timeout 120s sudo apt upgrade -y || true
 
@@ -41,19 +41,19 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.11
-    
+
       - name: install virtualenv
         run: pip install virtualenv
-      
+
       - name: init virtualenv
         run: virtualenv venv
-      
+
       - name: activate virtualenv
         run: source venv/bin/activate
 
       - name: upgrade pip
         run: python -m pip install --upgrade pip
-      
+
       - name: install graphviz
         run: sudo apt install -y graphviz
 
@@ -65,10 +65,10 @@ jobs:
 
       - name: generate git graph using Python and graphviz
         run: python git-graph/git_log2graphviz.py
-      
+
       - name: list directory contents
         run: ls -lisha
-      
+
       - name: archive generated svg
         uses: actions/upload-artifact@v3
         with:
@@ -76,7 +76,7 @@ jobs:
           path: |
             *.svg
             *.dot
-      
+
       - name: copy artifacts to git repo directory
         run: |
           cp *.svg git-graph/ || true
@@ -95,4 +95,3 @@ jobs:
           git commit -m "update git graph"
           git remote add github-pages "https://${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
           git push -u -f github-pages
-      
