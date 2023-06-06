@@ -1,7 +1,14 @@
+
 tasks:
   - init: >
       sudo apt update && sudo apt upgrade -y && sudo apt install graphviz -y && virtualenv venv && source venv/bin/activate && python -m pip install --upgrade pip && pip install -r requirements.txt
       git clone https://codeberg.org/Starfish/TinyWeatherForecastGermany.git "TinyWeatherForecastGermany"
       python git_log2graphviz.py
 
-
+vscode:
+  extensions:
+    - ms-python.python
+    - ms-python.black-formatter
+    - charliermarsh.ruff
+    - SonarSource.sonarlint-vscode
+    - eamodio.gitlens
