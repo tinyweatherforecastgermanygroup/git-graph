@@ -1,4 +1,5 @@
 import concurrent.futures
+import os
 import json
 import sys
 from multiprocessing import cpu_count
@@ -14,7 +15,9 @@ forks_req = requests.get(
 if forks_req.ok:
     forks_req_json = forks_req.json()
 else:
-    print(f"failed to request forks -> received unexpected status code {forks_req.status_code} -> text: {forks_req.text}")
+    print(
+        f"failed to request forks -> received unexpected status code {forks_req.status_code} -> text: {forks_req.text}"
+    )
     sys.exit(0)
 
 with open("forks-api.json", "w+", encoding="utf-8") as fh:
@@ -22,6 +25,16 @@ with open("forks-api.json", "w+", encoding="utf-8") as fh:
 
 # with open('forks-api.json','r',encoding='utf-8') as fh:
 #    forks_req_json = json.loads(str(fh.read()))
+
+for fork_entry in forks_req_json:
+    clone_url = str(fork_entry["clone_url"])
+    fork_id = str(fork_entry["id"])
+    os.system(
+        f"cd TinyWeatherForecastGermany && git remote add fork_{fork_id} '{clone_url}'"
+        f" && git fetch -a fork_{fork_id} || true"
+    )
+
+os.system("cd TinyWeatherForecastGermany && git fetch -a || true")
 
 
 def get_commits_json(clone_url, fork_id):
@@ -57,9 +70,10 @@ gitGraph
         fh.write(str(mermaid_str))
 
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=cpu_count()) as executor:
-    for fork_entry in forks_req_json:
-        clone_url = str(fork_entry["clone_url"])
+def generate_mermaid_gitgraph():
+    with concurrent.futures.ThreadPoolExecutor(max_workers=cpu_count()) as executor:
+        for fork_entry in forks_req_json:
+            clone_url = str(fork_entry["clone_url"])
 
-        future = executor.submit(get_commits_json, clone_url, fork_entry["id"])
-        # print(future.result())
+            future = executor.submit(get_commits_json, clone_url, fork_entry["id"])
+            # print(future.result())
