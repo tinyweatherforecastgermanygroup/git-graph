@@ -1,2 +1,2 @@
-PyDriller==2.5
+PyDriller==2.5.1
 requests==2.31.0
