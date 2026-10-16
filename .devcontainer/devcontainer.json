@@ -1,0 +1,27 @@
+{
+  "name": "git-graph",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "vscode",
+  "containerEnv": {
+    "UV_LINK_MODE": "copy"
+  },
+  "postCreateCommand": "uv sync --all-groups",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter"
+      ],
+      "settings": {
+        "pylint.args": ["--max-line-length=120"],
+        "flake8.args": ["--max-line-length=120"],
+        "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+        "sonarlint.disableTelemetry": true,
+        "gitlens.telemetry.enabled": false
+      }
+    }
+  }
+}
