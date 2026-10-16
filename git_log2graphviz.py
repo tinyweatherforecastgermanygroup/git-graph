@@ -229,7 +229,7 @@ digraph G {
         dot_graph_1 += "];\n"
 
         for c_parent in commit_dict["parents"]:
-            dot_graph_2 += f"\t {_quote_dot_string(c_parent)} -> " f"{_quote_dot_string(commit_hash)};\n"
+            dot_graph_2 += f"\t {_quote_dot_string(c_parent)} -> {_quote_dot_string(commit_hash)};\n"
 
         commits_list.append(commit_dict)
 

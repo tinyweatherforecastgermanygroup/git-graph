@@ -55,7 +55,7 @@ def integrate_forks(forks: list[dict[str, Any]], repository_path: Path) -> None:
         repository_path: Path to the local upstream Git repository.
 
     Raises:
-        FileNotFoundError: If Git is not available on ``PATH``.
+        FileNotFoundError: If Git is not available on `PATH`.
         subprocess.CalledProcessError: If remote setup or fetching fails.
     """
     git_executable = shutil.which("git")
