@@ -1,0 +1,33 @@
+[project]
+name = "git-graph"
+version = "0.1.0"
+description = "Generate a Graphviz commit graph for TinyWeatherForecastGermany."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "orjson>=3.13.0,<4",
+    "pydriller==2.12",
+    "regex>=2026.9.29",
+    "requests>=2.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "bandit>=1.9.4",
+    "black>=26.10.1",
+    "flake8>=7.4.1",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--cov=__init__ --cov=git_log2graphviz --cov-report=term-missing --cov-fail-under=80"
+
+[tool.black]
+line-length = 120
+target-version = ["py311"]
+
+[tool.uv]
+package = false
