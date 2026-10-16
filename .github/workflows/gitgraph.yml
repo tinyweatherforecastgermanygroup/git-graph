@@ -5,8 +5,6 @@ on:
   # Triggers the workflow on push events and only for the main branch
   push:
     branches: [main]
-  pull_request:
-    branches-ignore: [main]
   schedule:
     - cron: "5 7 * * */2" # every two days at 7:05am UTC
 
@@ -23,13 +21,14 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
-      - name: clone remote repo
-        run: git clone https://codeberg.org/Starfish/TinyWeatherForecastGermany.git TinyWeatherForecastGermany
-
       - name: clone this repo
         run: git clone https://github.com/${{ github.repository }}.git "git-graph"
+
+      - name: clone remote repo
+        run: git clone https://codeberg.org/Starfish/TinyWeatherForecastGermany.git git-graph/TinyWeatherForecastGermany
 
       # deactivated due to ongoing issues
       # - name: update apt packages
@@ -41,47 +40,43 @@ jobs:
       - name: Setup Python 3.x
         uses: actions/setup-python@v7
         with:
-          python-version: 3.11
+          python-version: 3.12
 
-      - name: install virtualenv
-        run: pip install virtualenv
-
-      - name: init virtualenv
-        run: virtualenv venv
-
-      - name: activate virtualenv
-        run: source venv/bin/activate
-
-      - name: upgrade pip
-        run: python -m pip install --upgrade pip
+      - name: install uv
+        uses: astral-sh/setup-uv@v10
+        with:
+          enable-cache: true
 
       - name: install graphviz
-        run: sudo apt install -y graphviz
+        run: sudo apt-get update && sudo apt-get install -y graphviz
 
-      - name: list directory contents
-        run: ls -lisha
+      - name: sync dependencies
+        run: uv sync --locked --all-groups
+        working-directory: git-graph
 
-      - name: install pip dependencies
-        run: pip install -r git-graph/requirements.txt
+      - name: check code quality and tests
+        run: |
+          uv run black --check __init__.py git_log2graphviz.py tests
+          uv run flake8 __init__.py git_log2graphviz.py tests
+          uv run bandit -r __init__.py git_log2graphviz.py
+          uv run pytest
+        working-directory: git-graph
+
+      - name: fetch and integrate repository forks
+        run: uv run --no-sync python __init__.py
+        working-directory: git-graph
 
       - name: generate git graph using Python and graphviz
-        run: python git-graph/git_log2graphviz.py
-
-      - name: list directory contents
-        run: ls -lisha
+        run: uv run --no-sync python git_log2graphviz.py
+        working-directory: git-graph
 
       - name: archive generated svg
         uses: actions/upload-artifact@v7
         with:
           name: generated-svg
           path: |
-            *.svg
-            *.dot
-
-      - name: copy artifacts to git repo directory
-        run: |
-          cp *.svg git-graph/ || true
-          cp *.dot git-graph/ || true
+            git-graph/git_graph.svg
+            git-graph/git_graph.dot
 
       - name: git commit and push
         run: |

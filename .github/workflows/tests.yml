@@ -1,0 +1,38 @@
+name: tests
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Download upstream Codeberg repository
+        run: git clone --depth 1 https://codeberg.org/Starfish/TinyWeatherForecastGermany.git TinyWeatherForecastGermany
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10
+        with:
+          enable-cache: true
+
+      - name: Sync locked dependencies
+        run: uv sync --locked --all-groups
+
+      - name: Run quality checks and tests
+        run: |
+          uv run black --check __init__.py git_log2graphviz.py tests
+          uv run flake8 __init__.py git_log2graphviz.py tests
+          uv run bandit -r __init__.py git_log2graphviz.py
+          uv run pytest
