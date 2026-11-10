@@ -7,7 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "orjson>=3.13.0,<4",
     "pydriller==2.12",
-    "regex>=2026.9.29",
+    "regex>=2026.11.7",
     "requests>=2.34.2",
 ]
 
